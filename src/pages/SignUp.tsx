@@ -1,10 +1,11 @@
+
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2, MapPin } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 import {
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -36,6 +38,8 @@ const baseSchema = {
 const farmerSchema = z.object({
   ...baseSchema,
   location: z.string().min(2, { message: "Location is required" }),
+  farmLocation: z.string().min(2, { message: "Farm location is required" }),
+  farmDescription: z.string().min(10, { message: "Please provide a description of at least 10 characters" }),
   phoneNumber: z.string().min(10, { message: "Please enter a valid phone number" }),
 });
 
@@ -53,8 +57,11 @@ const SignUp = () => {
 
   // Determine if farmer signup based on URL
   const isFarmer = location.pathname === "/sign-up/farmer";
+  
+  // Use the appropriate schema based on the user type
   const formSchema = isFarmer ? farmerSchema : customerSchema;
   
+  // Create a type from the schema
   type FormValues = z.infer<typeof formSchema>;
 
   // Initialize the form
@@ -66,6 +73,8 @@ const SignUp = () => {
           email: "",
           password: "",
           location: "",
+          farmLocation: "",
+          farmDescription: "",
           phoneNumber: "",
         }
       : {
@@ -199,9 +208,44 @@ const SignUp = () => {
                     name="location"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Location</FormLabel>
+                        <FormLabel>Your Location</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your farm location" {...field} />
+                          <Input placeholder="Enter your residential location" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="farmLocation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Farm Location</FormLabel>
+                        <FormControl>
+                          <div className="relative">
+                            <Input placeholder="Enter your farm location" {...field} />
+                            <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                          </div>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="farmDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Farm Description</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Describe your farm, products, and farming practices" 
+                            className="resize-none min-h-[100px]"
+                            {...field} 
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
