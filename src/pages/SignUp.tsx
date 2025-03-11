@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -18,12 +18,11 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
-// Define the form schema with Zod
-const formSchema = z.object({
+// Define the base form schema with Zod
+const baseSchema = {
   name: z.string().min(2, { message: "Name must be at least 2 characters" }),
   email: z.string().email({ message: "Please enter a valid email address" }),
   password: z
@@ -32,19 +31,32 @@ const formSchema = z.object({
     .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
     .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
     .regex(/[0-9]/, { message: "Password must contain at least one number" }),
-  role: z.enum(["farmer", "customer"], {
-    required_error: "Please select a role",
-  }),
+};
+
+// Add farmer-specific fields
+const farmerSchema = z.object({
+  ...baseSchema,
+  location: z.string().min(2, { message: "Location is required" }),
+  phoneNumber: z.string().min(10, { message: "Please enter a valid phone number" }),
 });
 
-// Type for our form
-type FormValues = z.infer<typeof formSchema>;
+// Customer schema remains simple
+const customerSchema = z.object({
+  ...baseSchema,
+});
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+
+  // Determine if farmer signup based on URL
+  const isFarmer = location.pathname === "/sign-up/farmer";
+  const formSchema = isFarmer ? farmerSchema : customerSchema;
+  
+  type FormValues = z.infer<typeof formSchema>;
 
   // Initialize the form
   const form = useForm<FormValues>({
@@ -53,7 +65,10 @@ const SignUp = () => {
       name: "",
       email: "",
       password: "",
-      role: "customer",
+      ...(isFarmer && {
+        location: "",
+        phoneNumber: "",
+      }),
     },
   });
 
@@ -71,12 +86,12 @@ const SignUp = () => {
       // Success toast
       toast({
         title: "Account created!",
-        description: `You've successfully signed up as a ${data.role}.`,
+        description: `You've successfully signed up as a ${isFarmer ? "farmer" : "customer"}.`,
         variant: "default",
       });
       
       // Redirect based on role
-      if (data.role === "farmer") {
+      if (isFarmer) {
         navigate("/farmer-dashboard");
       } else {
         navigate("/");
@@ -109,7 +124,7 @@ const SignUp = () => {
           className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-sm border border-gray-100"
         >
           <div className="text-center">
-            <h1 className="text-2xl font-bold">Create Your Account</h1>
+            <h1 className="text-2xl font-bold">Create Your {isFarmer ? "Farmer" : "Customer"} Account</h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Join FarmFresh Connect and start your journey
             </p>
@@ -174,40 +189,37 @@ const SignUp = () => {
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="role"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormLabel>I am a...</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={field.onChange}
-                        defaultValue={field.value}
-                        className="flex space-x-4"
-                      >
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="customer" />
-                          </FormControl>
-                          <FormLabel className="font-normal cursor-pointer">
-                            Customer
-                          </FormLabel>
-                        </FormItem>
-                        <FormItem className="flex items-center space-x-2 space-y-0">
-                          <FormControl>
-                            <RadioGroupItem value="farmer" />
-                          </FormControl>
-                          <FormLabel className="font-normal cursor-pointer">
-                            Farmer
-                          </FormLabel>
-                        </FormItem>
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {isFarmer && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="location"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Location</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your farm location" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="phoneNumber"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Phone Number</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your phone number" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
 
               <Button
                 type="submit"
