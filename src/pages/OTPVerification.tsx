@@ -156,8 +156,8 @@ const OTPVerification = () => {
                         maxLength={6}
                         render={({ slots }) => (
                           <InputOTPGroup>
-                            {slots.map((slot, index) => (
-                              <InputOTPSlot key={index} {...slot} />
+                            {slots.map((slot, i) => (
+                              <InputOTPSlot key={i} index={i} />
                             ))}
                           </InputOTPGroup>
                         )}
