@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -61,15 +60,19 @@ const SignUp = () => {
   // Initialize the form
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-      email: "",
-      password: "",
-      ...(isFarmer && {
-        location: "",
-        phoneNumber: "",
-      }),
-    },
+    defaultValues: isFarmer 
+      ? {
+          name: "",
+          email: "",
+          password: "",
+          location: "",
+          phoneNumber: "",
+        }
+      : {
+          name: "",
+          email: "",
+          password: "",
+        },
   });
 
   // Handle form submission

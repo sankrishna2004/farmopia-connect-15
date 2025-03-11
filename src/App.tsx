@@ -16,6 +16,7 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import OTPVerification from "./pages/OTPVerification";
 import Unauthorized from "./pages/Unauthorized";
+import RoleSelection from "./pages/RoleSelection";
 
 const queryClient = new QueryClient();
 
