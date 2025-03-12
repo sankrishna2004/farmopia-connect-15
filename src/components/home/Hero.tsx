@@ -160,30 +160,7 @@ const Hero = () => {
               <div className="relative overflow-hidden rounded-2xl shadow-2xl aspect-square sm:aspect-[4/3]">
                 <img alt="Fresh farm produce" className="w-full h-full object-cover" src="https://static.vecteezy.com/system/resources/previews/037/980/818/non_2x/ai-generated-top-aerial-view-of-green-fields-and-meadows-landscape-with-lines-of-fields-grass-trees-indicating-healthy-crop-growth-ai-generated-free-photo.jpg" />
                 
-                {/* Floating cards */}
-                <motion.div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg" initial={{
-                x: -20,
-                opacity: 0
-              }} animate={{
-                x: 0,
-                opacity: 1
-              }} transition={{
-                delay: 1,
-                duration: 0.6
-              }}>
-                  <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-accent flex items-center justify-center">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M12 6V12L16 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium">Same-day Delivery</p>
-                      <p className="text-xs text-muted-foreground">For orders before 12pm</p>
-                    </div>
-                  </div>
-                </motion.div>
+                {/* Removed the Same-day Delivery floating card that was here */}
                 
                 <motion.div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-3 shadow-lg" initial={{
                 x: 20,
