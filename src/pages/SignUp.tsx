@@ -48,6 +48,10 @@ const customerSchema = z.object({
   ...baseSchema,
 });
 
+// Create types from the schemas
+type FarmerFormValues = z.infer<typeof farmerSchema>;
+type CustomerFormValues = z.infer<typeof customerSchema>;
+
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -58,34 +62,34 @@ const SignUp = () => {
   // Determine if farmer signup based on URL
   const isFarmer = location.pathname === "/sign-up/farmer";
   
-  // Use the appropriate schema based on the user type
-  const formSchema = isFarmer ? farmerSchema : customerSchema;
-  
-  // Create a type from the schema
-  type FormValues = z.infer<typeof formSchema>;
-
-  // Initialize the form
-  const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
-    defaultValues: isFarmer 
-      ? {
-          name: "",
-          email: "",
-          password: "",
-          location: "",
-          farmLocation: "",
-          farmDescription: "",
-          phoneNumber: "",
-        }
-      : {
-          name: "",
-          email: "",
-          password: "",
-        },
+  // Initialize the appropriate form based on user type
+  const farmerForm = useForm<FarmerFormValues>({
+    resolver: zodResolver(farmerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+      location: "",
+      farmLocation: "",
+      farmDescription: "",
+      phoneNumber: "",
+    },
   });
 
+  const customerForm = useForm<CustomerFormValues>({
+    resolver: zodResolver(customerSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
+  });
+
+  // Use the appropriate form
+  const form = isFarmer ? farmerForm : customerForm;
+
   // Handle form submission
-  const onSubmit = async (data: FormValues) => {
+  const onSubmit = async (data: FarmerFormValues | CustomerFormValues) => {
     setIsSubmitting(true);
     
     try {

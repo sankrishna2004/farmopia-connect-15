@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -35,7 +36,7 @@ const Hero = () => {
               delay: 0.3,
               duration: 0.5
             }}>
-                Farm to Table, Simplified
+                Farm to Business, Simplified
               </motion.span>
               <motion.h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-tight leading-tight" initial={{
               opacity: 0
@@ -45,7 +46,7 @@ const Hero = () => {
               delay: 0.5,
               duration: 0.7
             }}>
-                Fresh From Local <span className="text-primary">Farms</span> To Your Table
+                Fresh From Local <span className="text-primary">Farms</span> To Wholesale Buyers
               </motion.h1>
             </div>
             
@@ -57,7 +58,7 @@ const Hero = () => {
             delay: 0.7,
             duration: 0.7
           }}>
-              Connect directly with local farmers to get the freshest produce, dairy, and meat products. Support your community and eat healthier.
+              Connect directly with local farmers for bulk wholesale purchases of fresh produce, dairy, and meat products. Perfect for restaurants, grocery stores, and distributors.
             </motion.p>
             
             {/* Search bar */}
@@ -128,7 +129,7 @@ const Hero = () => {
                     <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <span className="text-sm">Local Sourcing</span>
+                <span className="text-sm">Wholesale Quantities</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center">
@@ -136,7 +137,7 @@ const Hero = () => {
                     <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 </div>
-                <span className="text-sm">Fresh Produce</span>
+                <span className="text-sm">Bulk Pricing</span>
               </div>
             </motion.div>
           </motion.div>
