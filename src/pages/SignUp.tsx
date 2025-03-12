@@ -1,51 +1,57 @@
-
 import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, Loader2, MapPin } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { z } from "zod";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
+import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
   FormField,
   FormItem,
   FormLabel,
+  FormControl,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
+import { toast } from "@/components/ui/use-toast";
 import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
 
-// Define the base form schema with Zod
-const baseSchema = {
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters" })
-    .regex(/[A-Z]/, { message: "Password must contain at least one uppercase letter" })
-    .regex(/[a-z]/, { message: "Password must contain at least one lowercase letter" })
-    .regex(/[0-9]/, { message: "Password must contain at least one number" }),
-};
-
-// Add farmer-specific fields
-const farmerSchema = z.object({
-  ...baseSchema,
-  location: z.string().min(2, { message: "Location is required" }),
-  farmLocation: z.string().min(2, { message: "Farm location is required" }),
-  farmDescription: z.string().min(10, { message: "Please provide a description of at least 10 characters" }),
-  phoneNumber: z.string().min(10, { message: "Please enter a valid phone number" }),
+// Schemas for form validation
+const customerSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Invalid email address.",
+  }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
 });
 
-// Customer schema remains simple
-const customerSchema = z.object({
-  ...baseSchema,
+const farmerSchema = z.object({
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  email: z.string().email({
+    message: "Invalid email address.",
+  }),
+  password: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
+  location: z.string().min(2, {
+    message: "Location must be at least 2 characters.",
+  }),
+  farmLocation: z.string().min(2, {
+    message: "Farm location must be at least 2 characters.",
+  }),
+  farmDescription: z.string().min(10, {
+    message: "Farm description must be at least 10 characters.",
+  }),
+  phoneNumber: z.string().regex(/^(\+?\d{1,4}?)?\d{8,15}$/, {
+    message: "Invalid phone number.",
+  }),
 });
 
 // Create types from the schemas
@@ -53,11 +59,9 @@ type FarmerFormValues = z.infer<typeof farmerSchema>;
 type CustomerFormValues = z.infer<typeof customerSchema>;
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
-  const { toast } = useToast();
+  const navigate = useNavigate();
 
   // Determine if farmer signup based on URL
   const isFarmer = location.pathname === "/sign-up/farmer";
@@ -90,221 +94,154 @@ const SignUp = () => {
 
   // Handle form submission
   const onSubmit = async (data: FarmerFormValues | CustomerFormValues) => {
-    setIsSubmitting(true);
-    
-    try {
-      // This would be replaced with actual authentication API call
-      console.log("Signing up user:", data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Success toast
+    setIsLoading(true);
+    // Simulate authentication
+    setTimeout(() => {
+      setIsLoading(false);
       toast({
-        title: "Account created!",
-        description: `You've successfully signed up as a ${isFarmer ? "farmer" : "customer"}.`,
-        variant: "default",
+        title: "Success!",
+        description: "You have successfully signed up.",
       });
-      
-      // Redirect based on role
-      if (isFarmer) {
-        navigate("/farmer-dashboard");
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
-      toast({
-        title: "Something went wrong",
-        description: "Please try again later.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+      navigate("/");
+    }, 1000);
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className="min-h-screen flex flex-col"
-    >
+    <div className="min-h-screen flex flex-col">
       <Header />
       
-      <main className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 bg-gray-50">
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-          className="w-full max-w-md space-y-8 bg-white p-8 rounded-xl shadow-sm border border-gray-100"
-        >
-          <div className="text-center">
-            <h1 className="text-2xl font-bold">Create Your {isFarmer ? "Farmer" : "Customer"} Account</h1>
-            <p className="mt-2 text-sm text-muted-foreground">
-              Join FarmFresh Connect and start your journey
-            </p>
-          </div>
-
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your full name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email Address</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="you@example.com" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <div className="relative">
-                        <Input
-                          type={showPassword ? "text" : "password"}
-                          placeholder="Create a strong password"
-                          {...field}
-                        />
-                        <Button
-                          type="button"
-                          variant="ghost"
-                          size="icon"
-                          className="absolute right-2 top-1/2 -translate-y-1/2"
-                          onClick={() => setShowPassword(!showPassword)}
-                        >
-                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                        </Button>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              {isFarmer && (
-                <>
-                  <FormField
-                    control={form.control}
-                    name="location"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Your Location</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter your residential location" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="farmLocation"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Farm Location</FormLabel>
-                        <FormControl>
-                          <div className="relative">
-                            <Input placeholder="Enter your farm location" {...field} />
-                            <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="farmDescription"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Farm Description</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Describe your farm, products, and farming practices" 
-                            className="resize-none min-h-[100px]"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="phoneNumber"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter your phone number" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </>
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            {isFarmer ? "Create a Farmer Account" : "Create a Customer Account"}
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            {isFarmer
+              ? "Let's get your farm connected to local buyers."
+              : "Sign up to start sourcing directly from local farms."}
+          </p>
+        </div>
+      </div>
+      
+      <div className="max-w-md w-full mx-auto p-6 bg-card shadow-lg rounded-lg">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your name" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
               )}
-
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Creating account...
-                  </>
-                ) : (
-                  "Sign Up"
-                )}
-              </Button>
-            </form>
-          </Form>
-
-          <div className="mt-4 text-center text-sm">
-            <p>
-              Already have an account?{" "}
-              <Link
-                to="/sign-in"
-                className="text-primary hover:text-primary/80 font-medium"
-              >
-                Sign In
-              </Link>
-            </p>
-          </div>
-        </motion.div>
-      </main>
-
-      <Footer />
-    </motion.div>
+            />
+            
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your email" type="email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            {isFarmer && (
+              <>
+                <FormField
+                  control={farmerForm.control}
+                  name="location"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Location</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your location" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={farmerForm.control}
+                  name="farmLocation"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Farm Location</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your farm location" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={farmerForm.control}
+                  name="farmDescription"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Farm Description</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Describe your farm" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={farmerForm.control}
+                  name="phoneNumber"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Phone Number</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your phone number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </>
+            )}
+            
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="Enter your password" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <Button disabled={isLoading} className="w-full" type="submit">
+              {isLoading ? "Signing up..." : "Sign Up"}
+            </Button>
+          </form>
+        </Form>
+        <div className="mt-4 text-sm text-center">
+          Already have an account?{" "}
+          <Link to="/login" className="text-primary">
+            Log In
+          </Link>
+        </div>
+      </div>
+      
+    </div>
   );
 };
 

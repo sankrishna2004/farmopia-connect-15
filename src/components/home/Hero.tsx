@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Search, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
+
 const Hero = () => {
   return <section className="relative min-h-screen flex items-center pt-20 pb-16 overflow-hidden">
       {/* Background gradient */}
@@ -46,7 +47,7 @@ const Hero = () => {
               delay: 0.5,
               duration: 0.7
             }}>
-                Fresh From Local <span className="text-primary">Farms</span> To Wholesale Buyers
+                From Fields to Buyers – <span className="text-primary">Fresh</span>, Long-Lasting Staples
               </motion.h1>
             </div>
             
@@ -213,4 +214,5 @@ const Hero = () => {
       </div>
     </section>;
 };
+
 export default Hero;
