@@ -10,7 +10,7 @@ const features = [
   },
   {
     icon: Leaf,
-    title: "Organic & Sustainable",
+    title: "Natural & Sustainable",
     description: "Support environmentally responsible farming practices that prioritize sustainability."
   },
   {

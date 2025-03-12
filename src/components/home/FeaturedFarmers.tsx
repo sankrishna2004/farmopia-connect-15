@@ -16,8 +16,8 @@ const featuredFarmers = [
     distance: "5 miles away",
     rating: 4.8,
     reviews: 126,
-    specialties: ["Organic Vegetables", "Fruits", "Herbs"],
-    description: "Family-owned farm specializing in organic vegetables and fruits grown using traditional methods."
+    specialties: ["Natural Vegetables", "Fruits", "Herbs"],
+    description: "Family-owned farm specializing in natural vegetables and fruits grown using traditional methods."
   },
   {
     id: 2,
