@@ -59,7 +59,7 @@ const Hero = () => {
             delay: 0.7,
             duration: 0.7
           }}>
-              Connect directly with local farmers for bulk wholesale purchases of fresh produce, dairy, and meat products. Perfect for restaurants, grocery stores, and distributors.
+              Connect directly with local farmers for bulk purchases—freshly harvested and stored for year-round use. Ideal for bulk buyers seeking quality farm produce.
             </motion.p>
             
             {/* Search bar */}
