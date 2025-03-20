@@ -3,43 +3,43 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
 
-// Mock data for product categories
+// Updated categories with long-term storage crops
 const categories = [
   {
     id: 1,
-    name: "Fruits & Vegetables",
-    image: "https://images.unsplash.com/photo-1610348725531-843dff563e2c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    count: 148,
+    name: "Rice Varieties",
+    image: "https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+    count: 42,
   },
   {
     id: 2,
-    name: "Dairy & Eggs",
-    image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    count: 87,
+    name: "Chillies",
+    image: "https://images.unsplash.com/photo-1588252303782-cb80119abd6d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+    count: 28,
   },
   {
     id: 3,
-    name: "Meat & Poultry",
-    image: "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    count: 62,
+    name: "Turmeric",
+    image: "https://images.unsplash.com/photo-1615485500704-8e990f9900f8?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+    count: 15,
   },
   {
     id: 4,
-    name: "Herbs & Spices",
-    image: "https://images.unsplash.com/photo-1590301157890-4810ed352733?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    count: 54,
+    name: "Groundnuts",
+    image: "https://images.unsplash.com/photo-1567892737950-30fd8f4e389f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+    count: 23,
   },
   {
     id: 5,
-    name: "Honey & Preserves",
-    image: "https://images.unsplash.com/photo-1587049352851-8d4e89133924?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    count: 31,
+    name: "Pulses & Lentils",
+    image: "https://images.unsplash.com/photo-1515543904458-b0a3a435d0dc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+    count: 36,
   },
   {
     id: 6,
-    name: "Bread & Baked Goods",
-    image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80",
-    count: 43,
+    name: "Storage Crops",
+    image: "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=800&q=80",
+    count: 31,
   },
 ];
 
@@ -99,7 +99,7 @@ const Categories = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            Discover Fresh Products
+            Discover Long-Term Storage Crops
           </motion.h2>
           <motion.p 
             className="text-lg text-muted-foreground"
@@ -108,7 +108,7 @@ const Categories = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            Explore our wide range of farm-fresh products across different categories, all sourced directly from local farmers.
+            Explore our selection of rice, chillies, turmeric, groundnut, pulses and other crops that are perfect for long-term storage and use throughout the year.
           </motion.p>
         </div>
         
