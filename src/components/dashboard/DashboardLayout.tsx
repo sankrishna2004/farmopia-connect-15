@@ -14,6 +14,7 @@ import OrdersTab from "./tabs/OrdersTab";
 import ProductsTab from "./tabs/ProductsTab";
 import FarmersTab from "./tabs/FarmersTab";
 import FilterSidebar from "./FilterSidebar";
+
 export default function DashboardLayout() {
   const {
     user,
@@ -37,15 +38,18 @@ export default function DashboardLayout() {
       tab: activeTab
     });
   }, [activeTab, setSearchParams]);
+  
   const handleLogout = () => {
     logout();
     navigate("/");
     toast.info("You have been logged out");
   };
+  
   if (!user) {
     navigate("/sign-in");
     return null;
   }
+  
   return <motion.div initial={{
     opacity: 0
   }} animate={{
@@ -68,8 +72,12 @@ export default function DashboardLayout() {
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm" className="ml-auto">
                   <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-primary font-medium">
-                      FarmFresh
+                    <div className="h-6 w-6 rounded-full overflow-hidden">
+                      <img 
+                        src="/lovable-uploads/8d4a578a-f2e7-4c6b-a6e1-efc6deaf426b.png" 
+                        alt="Profile" 
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     <span className="text-xs">{user.name}</span>
                     <ChevronDown className="h-4 w-4" />

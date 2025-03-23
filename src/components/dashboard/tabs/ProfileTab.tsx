@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,9 +27,7 @@ const ProfileTab = () => {
       : "Health-conscious consumer looking for high-quality farm products.",
     specialties: user?.role === "farmer" ? ["Rice", "Pulses"] : [],
     location: "Karnataka",
-    avatar: user?.role === "farmer" 
-      ? "https://randomuser.me/api/portraits/men/32.jpg" 
-      : "https://randomuser.me/api/portraits/women/44.jpg",
+    avatar: "/lovable-uploads/8d4a578a-f2e7-4c6b-a6e1-efc6deaf426b.png",
   });
   
   const handleSaveProfile = () => {
