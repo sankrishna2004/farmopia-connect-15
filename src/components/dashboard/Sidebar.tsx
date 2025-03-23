@@ -2,7 +2,7 @@
 import { User } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Settings, ShoppingBag, MessageCircle, Package, LogOut } from "lucide-react";
+import { Settings, ShoppingBag, MessageCircle, Package, LogOut, CreditCard } from "lucide-react";
 
 interface SidebarProps {
   activeTab: string;
@@ -41,6 +41,16 @@ const Sidebar = ({ activeTab, setActiveTab, user, handleLogout }: SidebarProps) 
               </li>
               <li>
                 <Button 
+                  variant={activeTab === "payment" ? "default" : "ghost"} 
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab("payment")}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Payment
+                </Button>
+              </li>
+              <li>
+                <Button 
                   variant={activeTab === "farmers" ? "default" : "ghost"} 
                   className="w-full justify-start"
                   onClick={() => setActiveTab("farmers")}
@@ -70,6 +80,16 @@ const Sidebar = ({ activeTab, setActiveTab, user, handleLogout }: SidebarProps) 
                 >
                   <ShoppingBag className="h-4 w-4 mr-2" />
                   Orders
+                </Button>
+              </li>
+              <li>
+                <Button 
+                  variant={activeTab === "payment" ? "default" : "ghost"} 
+                  className="w-full justify-start"
+                  onClick={() => setActiveTab("payment")}
+                >
+                  <CreditCard className="h-4 w-4 mr-2" />
+                  Payment
                 </Button>
               </li>
             </>

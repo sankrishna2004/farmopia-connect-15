@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -12,6 +13,7 @@ import ProfileTab from "./tabs/ProfileTab";
 import OrdersTab from "./tabs/OrdersTab";
 import ProductsTab from "./tabs/ProductsTab";
 import FarmersTab from "./tabs/FarmersTab";
+import PaymentTab from "./tabs/PaymentTab";
 import FilterSidebar from "./FilterSidebar";
 
 export default function DashboardLayout() {
@@ -25,7 +27,7 @@ export default function DashboardLayout() {
   const [activeTab, setActiveTab] = useState(tabParam || "profile");
 
   useEffect(() => {
-    if (tabParam && ["profile", "products", "orders", "farmers"].includes(tabParam)) {
+    if (tabParam && ["profile", "products", "orders", "farmers", "payment"].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, [tabParam]);
@@ -107,6 +109,7 @@ export default function DashboardLayout() {
             {activeTab === "orders" && <OrdersTab userRole={user.role} />}
             {activeTab === "products" && user.role === "farmer" && <ProductsTab />}
             {activeTab === "farmers" && user.role === "customer" && <FarmersTab />}
+            {activeTab === "payment" && <PaymentTab />}
           </div>
         </div>
       </main>
