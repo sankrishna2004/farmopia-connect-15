@@ -17,6 +17,8 @@ import ResetPassword from "./pages/ResetPassword";
 import OTPVerification from "./pages/OTPVerification";
 import Unauthorized from "./pages/Unauthorized";
 import RoleSelection from "./pages/RoleSelection";
+import Reviews from "./pages/Reviews";
+import FarmersList from "./pages/FarmersList";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +41,8 @@ const App = () => (
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/verify-otp" element={<OTPVerification />} />
               <Route path="/unauthorized" element={<Unauthorized />} />
+              <Route path="/farmers" element={<FarmersList />} />
+              <Route path="/reviews/:farmerId" element={<Reviews />} />
               
               {/* Protected routes for all authenticated users */}
               {/* Add protected routes here, for example:
