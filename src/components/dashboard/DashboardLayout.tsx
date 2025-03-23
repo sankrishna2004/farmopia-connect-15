@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -25,14 +24,12 @@ export default function DashboardLayout() {
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState(tabParam || "profile");
 
-  // Effect to handle URL parameters for tab selection
   useEffect(() => {
     if (tabParam && ["profile", "products", "orders", "farmers"].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, [tabParam]);
 
-  // Effect to update URL when tab changes
   useEffect(() => {
     setSearchParams({
       tab: activeTab
@@ -57,7 +54,6 @@ export default function DashboardLayout() {
   }} exit={{
     opacity: 0
   }} className="min-h-screen bg-gray-50">
-      {/* Dashboard Header */}
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto py-4 px-4 flex justify-between items-center bg-green-50">
           <h1 className="text-2xl font-bold text-lime-700">FarmFresh</h1>
@@ -98,17 +94,14 @@ export default function DashboardLayout() {
         </div>
       </header>
 
-      {/* Dashboard Content */}
       <main className="container mx-auto py-8 px-4">
         <div className="grid md:grid-cols-[240px_1fr] gap-6">
-          {/* Sidebar */}
           <div className="space-y-4">
             <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} user={user} handleLogout={handleLogout} />
             
             {activeTab === "farmers" && user.role === "customer" && <FilterSidebar />}
           </div>
           
-          {/* Main Content */}
           <div className="space-y-6">
             {activeTab === "profile" && <ProfileTab />}
             {activeTab === "orders" && <OrdersTab userRole={user.role} />}
