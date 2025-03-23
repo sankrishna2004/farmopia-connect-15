@@ -44,8 +44,15 @@ export const useAuth = () => useContext(AuthContext);
 
 // Auth provider component
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  // Initialize with a demo user for easier testing
+  const [user, setUser] = useState<User | null>({
+    id: "demo-user-123",
+    name: "Demo User",
+    email: "demo@example.com",
+    role: "customer",
+    isVerified: true,
+  });
+  const [isLoading, setIsLoading] = useState(false);
 
   // Check for existing session on mount
   useEffect(() => {
@@ -56,10 +63,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         
         if (storedUser) {
           setUser(JSON.parse(storedUser));
+        } else {
+          // Save the demo user to localStorage for persistence
+          localStorage.setItem("farmfresh_user", JSON.stringify(user));
         }
       } catch (error) {
         console.error("Auth initialization error:", error);
-        setUser(null);
       } finally {
         setIsLoading(false);
       }
@@ -108,9 +117,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // In a real app, this would make an API request to register a new user
-      // For demo, we'll assume verification is needed
+      // For demo, we'll create a user right away
       
-      // Return success but don't log in yet (verification needed)
+      const newUser: User = {
+        id: `user-${Date.now()}`,
+        name,
+        email,
+        role,
+        isVerified: true,
+      };
+      
+      setUser(newUser);
+      localStorage.setItem("farmfresh_user", JSON.stringify(newUser));
+      
       return;
     } catch (error) {
       console.error("Signup error:", error);

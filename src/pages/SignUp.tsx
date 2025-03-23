@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import Header from "@/components/layout/Header";
+import { useAuth } from "@/contexts/AuthContext";
 
-// Schemas for form validation
 const customerSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
@@ -54,7 +54,6 @@ const farmerSchema = z.object({
   }),
 });
 
-// Create types from the schemas
 type FarmerFormValues = z.infer<typeof farmerSchema>;
 type CustomerFormValues = z.infer<typeof customerSchema>;
 
@@ -62,11 +61,10 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
-  // Determine if farmer signup based on URL
   const isFarmer = location.pathname === "/sign-up/farmer";
-  
-  // Initialize the appropriate form based on user type
+
   const farmerForm = useForm<FarmerFormValues>({
     resolver: zodResolver(farmerSchema),
     defaultValues: {
@@ -89,21 +87,36 @@ const SignUp = () => {
     },
   });
 
-  // Use the appropriate form
   const form = isFarmer ? farmerForm : customerForm;
 
-  // Handle form submission
   const onSubmit = async (data: FarmerFormValues | CustomerFormValues) => {
     setIsLoading(true);
-    // Simulate authentication
-    setTimeout(() => {
+    try {
+      await signup(
+        data.name, 
+        data.email, 
+        (data as any).password, 
+        isFarmer ? "farmer" : "customer"
+      );
+      
       setIsLoading(false);
       toast({
         title: "Success!",
         description: "You have successfully signed up.",
       });
-      navigate("/");
-    }, 1000);
+      navigate("/dashboard");
+    } catch (error) {
+      setIsLoading(false);
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleDirectAccess = () => {
+    navigate("/dashboard");
   };
 
   return (
@@ -120,6 +133,16 @@ const SignUp = () => {
               ? "Let's get your farm connected to local buyers."
               : "Sign up to start sourcing directly from local farms."}
           </p>
+          
+          <div className="mt-4">
+            <Button 
+              variant="secondary" 
+              onClick={handleDirectAccess}
+              className="mx-auto"
+            >
+              Quick Access to Profile Dashboard
+            </Button>
+          </div>
         </div>
       </div>
       
