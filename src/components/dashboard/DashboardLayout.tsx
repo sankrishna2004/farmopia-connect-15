@@ -1,16 +1,10 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, LogOut } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { ChevronDown } from "lucide-react";
 import { toast } from "sonner";
 import Sidebar from "./Sidebar";
@@ -19,49 +13,49 @@ import OrdersTab from "./tabs/OrdersTab";
 import ProductsTab from "./tabs/ProductsTab";
 import FarmersTab from "./tabs/FarmersTab";
 import FilterSidebar from "./FilterSidebar";
-
 export default function DashboardLayout() {
-  const { user, logout } = useAuth();
+  const {
+    user,
+    logout
+  } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const tabParam = searchParams.get('tab');
-  
   const [activeTab, setActiveTab] = useState(tabParam || "profile");
-  
+
   // Effect to handle URL parameters for tab selection
   useEffect(() => {
     if (tabParam && ["profile", "products", "orders", "farmers"].includes(tabParam)) {
       setActiveTab(tabParam);
     }
   }, [tabParam]);
-  
+
   // Effect to update URL when tab changes
   useEffect(() => {
-    setSearchParams({ tab: activeTab });
+    setSearchParams({
+      tab: activeTab
+    });
   }, [activeTab, setSearchParams]);
-  
   const handleLogout = () => {
     logout();
     navigate("/");
     toast.info("You have been logged out");
   };
-
   if (!user) {
     navigate("/sign-in");
     return null;
   }
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="min-h-screen bg-gray-50"
-    >
+  return <motion.div initial={{
+    opacity: 0
+  }} animate={{
+    opacity: 1
+  }} exit={{
+    opacity: 0
+  }} className="min-h-screen bg-gray-50">
       {/* Dashboard Header */}
       <header className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto py-4 px-4 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Faropia</h1>
+        <div className="container mx-auto py-4 px-4 flex justify-between items-center bg-green-50">
+          <h1 className="text-2xl font-bold text-lime-700">FarmFresh</h1>
           
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="sm" onClick={() => navigate("/")}>
@@ -76,7 +70,7 @@ export default function DashboardLayout() {
                     <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-primary font-medium">
                       {user.name.charAt(0)}
                     </div>
-                    <span>{user.name}</span>
+                    <span className="text-xs">{user.name}</span>
                     <ChevronDown className="h-4 w-4" />
                   </div>
                 </Button>
@@ -102,9 +96,7 @@ export default function DashboardLayout() {
           <div className="space-y-4">
             <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} user={user} handleLogout={handleLogout} />
             
-            {activeTab === "farmers" && user.role === "customer" && (
-              <FilterSidebar />
-            )}
+            {activeTab === "farmers" && user.role === "customer" && <FilterSidebar />}
           </div>
           
           {/* Main Content */}
@@ -116,6 +108,5 @@ export default function DashboardLayout() {
           </div>
         </div>
       </main>
-    </motion.div>
-  );
+    </motion.div>;
 }
