@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Home, Package, ShoppingBag, MessageCircle, Settings, LogOut, ChevronDown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -48,7 +48,10 @@ const locations = ["Karnataka", "Andhra Pradesh", "Telangana", "Tamil Nadu", "Ke
 export default function Dashboard() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("profile");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabParam = searchParams.get('tab');
+  
+  const [activeTab, setActiveTab] = useState(tabParam || "profile");
   const [editMode, setEditMode] = useState(false);
   const [profileData, setProfileData] = useState({
     name: user?.name || "",
@@ -61,6 +64,18 @@ export default function Dashboard() {
     specialties: user?.role === "farmer" ? ["Rice", "Pulses"] : [],
     location: "Karnataka",
   });
+  
+  // Effect to handle URL parameters for tab selection
+  useEffect(() => {
+    if (tabParam && ["profile", "products", "orders", "farmers"].includes(tabParam)) {
+      setActiveTab(tabParam);
+    }
+  }, [tabParam]);
+  
+  // Effect to update URL when tab changes
+  useEffect(() => {
+    setSearchParams({ tab: activeTab });
+  }, [activeTab, setSearchParams]);
   
   // Filtering states for customers view
   const [locationFilter, setLocationFilter] = useState("");

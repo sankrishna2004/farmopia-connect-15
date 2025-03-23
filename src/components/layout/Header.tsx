@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { 
@@ -11,7 +11,10 @@ import {
   MapPin, 
   MessageSquare, 
   LogIn,
-  User
+  User,
+  Package,
+  LogOut,
+  Plus
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -22,13 +25,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useAuth } from "@/contexts/AuthContext";
+import { toast } from "sonner";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const isLoggedIn = false; // Replace with actual auth state
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -45,6 +51,12 @@ const Header = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    toast.success("Logged out successfully");
   };
 
   const navLinks = [
@@ -96,7 +108,7 @@ const Header = () => {
               <MapPin size={20} />
             </Button>
             
-            {isLoggedIn ? (
+            {user ? (
               <>
                 <Button variant="ghost" size="icon" className="hover:bg-secondary relative">
                   <Bell size={20} />
@@ -111,26 +123,40 @@ const Header = () => {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-8 w-8 rounded-full">
                       <Avatar className="h-8 w-8">
-                        <AvatarImage src="/placeholder.svg" alt="User" />
-                        <AvatarFallback>U</AvatarFallback>
+                        <AvatarImage src="/placeholder.svg" alt={user.name} />
+                        <AvatarFallback>{user.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56" align="end" forceMount>
                     <DropdownMenuLabel className="font-normal">
                       <div className="flex flex-col space-y-1">
-                        <p className="text-sm font-medium leading-none">User Name</p>
+                        <p className="text-sm font-medium leading-none">{user.name}</p>
                         <p className="text-xs leading-none text-muted-foreground">
-                          user@example.com
+                          {user.email}
                         </p>
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Orders</DropdownMenuItem>
-                    <DropdownMenuItem>Settings</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate("/dashboard")}>
+                      <User className="mr-2 h-4 w-4" />
+                      <span>Dashboard</span>
+                    </DropdownMenuItem>
+                    {user.role === "farmer" && (
+                      <DropdownMenuItem onClick={() => navigate("/dashboard?tab=products")}>
+                        <Plus className="mr-2 h-4 w-4" />
+                        <span>Add Product</span>
+                      </DropdownMenuItem>
+                    )}
+                    <DropdownMenuItem onClick={() => navigate("/dashboard?tab=orders")}>
+                      <Package className="mr-2 h-4 w-4" />
+                      <span>My Orders</span>
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem>Log out</DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="mr-2 h-4 w-4" />
+                      <span>Log out</span>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </>
@@ -179,7 +205,28 @@ const Header = () => {
                 {link.name}
               </Link>
             ))}
-            {!isLoggedIn && (
+            {user ? (
+              <div className="pt-2 flex flex-col space-y-3">
+                <Button onClick={() => navigate("/dashboard")} className="w-full flex items-center justify-start gap-2">
+                  <User size={18} />
+                  Dashboard
+                </Button>
+                {user.role === "farmer" && (
+                  <Button onClick={() => navigate("/dashboard?tab=products")} variant="outline" className="w-full flex items-center justify-start gap-2">
+                    <Plus size={18} />
+                    Add Product
+                  </Button>
+                )}
+                <Button onClick={() => navigate("/dashboard?tab=orders")} variant="outline" className="w-full flex items-center justify-start gap-2">
+                  <Package size={18} />
+                  My Orders
+                </Button>
+                <Button onClick={handleLogout} variant="ghost" className="w-full flex items-center justify-start gap-2 text-red-500">
+                  <LogOut size={18} />
+                  Log out
+                </Button>
+              </div>
+            ) : (
               <div className="pt-2 flex flex-col space-y-3">
                 <Link to="/sign-up">
                   <Button className="w-full">Sign Up</Button>
