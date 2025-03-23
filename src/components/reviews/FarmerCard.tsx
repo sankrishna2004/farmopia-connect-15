@@ -1,6 +1,6 @@
 
 import { useNavigate } from "react-router-dom";
-import { Star } from "lucide-react";
+import { ShoppingBag, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -44,9 +44,17 @@ export default function FarmerCard({ id, name, products, avgRating, reviewCount,
           Products: {products.join(", ")}
         </p>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <Button onClick={() => navigate(`/reviews/${id}`)} className="w-full">
+      <CardFooter className="p-4 pt-0 flex flex-col sm:flex-row gap-2">
+        <Button onClick={() => navigate(`/reviews/${id}`)} className="w-full sm:flex-1">
           Write a Review
+        </Button>
+        <Button 
+          onClick={() => navigate(`/products?farmerId=${id}`)} 
+          variant="outline" 
+          className="w-full sm:flex-1"
+        >
+          <ShoppingBag className="h-4 w-4 mr-2" />
+          View Products
         </Button>
       </CardFooter>
     </Card>

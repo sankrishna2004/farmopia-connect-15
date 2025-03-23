@@ -19,6 +19,7 @@ import Unauthorized from "./pages/Unauthorized";
 import RoleSelection from "./pages/RoleSelection";
 import Reviews from "./pages/Reviews";
 import FarmersList from "./pages/FarmersList";
+import Products from "./pages/Products"; // Import the new Products page
 
 const queryClient = new QueryClient();
 
@@ -43,6 +44,7 @@ const App = () => (
               <Route path="/unauthorized" element={<Unauthorized />} />
               <Route path="/farmers" element={<FarmersList />} />
               <Route path="/reviews/:farmerId" element={<Reviews />} />
+              <Route path="/products" element={<Products />} /> {/* Add the Products route */}
               
               {/* Protected routes for all authenticated users */}
               {/* Add protected routes here, for example:
