@@ -63,9 +63,11 @@ const ProfileTab = () => {
           
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex flex-col items-center space-y-4">
-              <Avatar className="h-32 w-32">
+              <Avatar className="h-32 w-32 bg-green-100">
                 <AvatarImage src={profileData.avatar} alt={profileData.name} />
-                <AvatarFallback>{profileData.name.charAt(0)}</AvatarFallback>
+                <AvatarFallback className="text-2xl font-bold text-green-700 bg-green-100">
+                  FarmFresh
+                </AvatarFallback>
               </Avatar>
               
               {editMode && (

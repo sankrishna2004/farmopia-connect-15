@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -68,7 +69,7 @@ export default function DashboardLayout() {
                 <Button variant="outline" size="sm" className="ml-auto">
                   <div className="flex items-center gap-2">
                     <div className="h-6 w-6 rounded-full bg-primary/20 flex items-center justify-center text-primary font-medium">
-                      {user.name.charAt(0)}
+                      FarmFresh
                     </div>
                     <span className="text-xs">{user.name}</span>
                     <ChevronDown className="h-4 w-4" />
